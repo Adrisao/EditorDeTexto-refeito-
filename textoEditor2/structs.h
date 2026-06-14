@@ -17,4 +17,9 @@ struct document{
     int totalLines;
 };
 
+struct cursor {
+    int x;
+    int y;
+};
+
 #endif

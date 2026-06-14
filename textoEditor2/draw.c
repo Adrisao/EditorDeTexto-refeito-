@@ -11,14 +11,15 @@
 #define CLEAR_SCREEN "\x1b[2J"
 #define CURSOR_HOME  "\x1b[H"
 
-// drawn the text on the screen
+// draw the text on the screen
 void draw(struct document *doc, int flags){
     struct line *current = doc->first;
 
     // cleaning the screen
-    write(STDOUT_FILENO, CLEAR_SCREEN, strlen(CLEAR_SCREEN));
-    write(STDOUT_FILENO, CURSOR_HOME, strlen(CURSOR_HOME));
-
+    if(!(flags & JUSTSHOW)){
+        write(STDOUT_FILENO, CLEAR_SCREEN, strlen(CLEAR_SCREEN));
+        write(STDOUT_FILENO, CURSOR_HOME, strlen(CURSOR_HOME));
+    }
     // wrinting again the whole screen
     int line = 0;
     while(current){
@@ -41,4 +42,21 @@ void draw(struct document *doc, int flags){
         write(STDOUT_FILENO, "\n", 1);
         current = current->next;
     }
+}
+
+int getTextOffset(int flags){
+    if(flags & LINENUMBERS)
+        return 5;
+
+    return 1;
+}
+
+// draw the cursor function
+void drawCursor(struct cursor *cursor, int flags){
+    // calculate screen cursor position
+    unsigned int screenX = cursor->x + getTextOffset(flags);
+    unsigned screenY = cursor->y + 1;
+    // draw the cursor
+    printf("\x1b[%d;%dH", screenY, screenX);
+    fflush(stdout);
 }

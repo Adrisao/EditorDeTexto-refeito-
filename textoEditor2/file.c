@@ -14,8 +14,6 @@ void OpenFile(char *dir, struct document *doc){
     if (dataPointer == NULL){
         printf("- System: arquivo %s não encontrado, no caso eu iria criar novo, n foi implementado ainda.\n", dir);
         return;
-    }else{
-        printf("- System: Arquivo %s aberto com sucesso.\n", dir);
     }
 
     // getting lines
