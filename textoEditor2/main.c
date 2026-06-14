@@ -6,8 +6,10 @@
 // local files
 #include "file.h"
 #include "structs.h"
+#include "draw.h"
+#include "flags.h"
 
-int flags = 0;
+enum FlagData flags;
 
 // function of getting flags and path
 void inputData(int argc, char *argv[], char **file){
@@ -16,7 +18,14 @@ void inputData(int argc, char *argv[], char **file){
     if (argc <= 2) return;
 
     // get flags
-    for (int i = 2; i < argc; i++){}
+    for (int i = 2; i < argc; i++){
+        //if it's a flag
+        if (argv[i][0] == '-'){
+            if (argv[i][1] == 'l'){
+                flags |= LINENUMBERS;
+            }
+        }
+    }
 
     return;
 }
@@ -41,11 +50,5 @@ int main(int argc, char *argv[]){
     // open file
     if (file) OpenFile(file, &doc);
 
-    struct line *teste = doc.last;
-
-    while (teste != NULL){
-        printf("- %s\n", teste->buffer);
-        teste = teste->before;
-    }
-    return 0;
+    draw(&doc, flags);
 }
