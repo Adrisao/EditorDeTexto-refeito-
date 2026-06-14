@@ -12,6 +12,8 @@
 #include "terminalConfig.h"
 #include "helpFunction.h"
 #include "keyBinds.h"
+#include "tools.h"
+#include "editor.h"
 
 enum FlagData flags;
 
@@ -76,7 +78,8 @@ int main(int argc, char *argv[]){
 }
 
 char loop(struct document *doc, struct cursor *cursor){
-    switch(readKey()){
+    unsigned short key = readKey();
+    switch(key){
     case KEY_EXIT:
         return 0;
     case KEY_SAVE:
@@ -86,26 +89,14 @@ char loop(struct document *doc, struct cursor *cursor){
         if (cursor->y > 0 && cursor->currentLine->before != NULL){
             cursor->y--;
             cursor->currentLine = cursor->currentLine->before;
-
-            //try to keep the x in same position
-            if(cursor->x_try <= cursor->currentLine->size){
-                cursor->x = cursor->x_try;
-            }else{
-                cursor->x = cursor->currentLine->size;
-            }
+            fixCursorX(cursor);
         }
         break;
     case KEY_ARROW_DOWN:
         if (cursor->currentLine->next != NULL){
             cursor->y++;
             cursor->currentLine = cursor->currentLine->next;
-
-            //try to keep the x in same position
-            if(cursor->x_try <= cursor->currentLine->size){
-                cursor->x = cursor->x_try;
-            }else{
-                cursor->x = cursor->currentLine->size;
-            }
+            fixCursorX(cursor);
         }
         break;
     case KEY_ARROW_RIGHT:
@@ -121,6 +112,10 @@ char loop(struct document *doc, struct cursor *cursor){
         break;
     case KEYERROR:
         printf("-KEY ERROR.\n");
+        break;
+    default:
+        if(flags & READONLY) break;
+        insert(key, cursor);
         break;
     }
     drawCursor(cursor, flags);

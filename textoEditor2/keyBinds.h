@@ -20,6 +20,6 @@
 
 // function
 
-int readKey(void);
+unsigned short readKey(void);
 
 #endif

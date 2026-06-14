@@ -5,7 +5,7 @@
 #include "keyBinds.h"
 
 // the keys that use complex sequence like the arrows
-int escKeys(unsigned char *key){
+unsigned short escKeys(unsigned short *key){
     switch(*key){
         case ESC_BRACKET:
             // if somethin went wrong
@@ -22,8 +22,8 @@ int escKeys(unsigned char *key){
 }
 
 // read Keys
-int readKey(void){
-    unsigned char key;
+unsigned short readKey(void){
+    unsigned short key = 0;
 
     //waiting an input
     while(read(STDIN_FILENO, &key, 1) != 1);

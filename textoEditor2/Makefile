@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -std=c11
 
 TARGET = editor
 
-SRCS = main.c editor.c file.c draw.c flags.c terminalConfig.c helpFunction.c keyBinds.c
+SRCS = main.c editor.c file.c draw.c flags.c terminalConfig.c helpFunction.c keyBinds.c tools.c
 OBJS = $(SRCS:.c=.o)
 
 $(TARGET): $(OBJS)

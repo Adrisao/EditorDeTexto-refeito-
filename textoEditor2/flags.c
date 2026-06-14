@@ -21,6 +21,8 @@ void inputData(int argc, char *argv[], char **file, enum FlagData *flags){
             case 'h':
                 *flags |= HELPFLAG;
                 continue;
+            case 'r':
+                *flags |= READONLY;
             default:
                 continue;
             }
