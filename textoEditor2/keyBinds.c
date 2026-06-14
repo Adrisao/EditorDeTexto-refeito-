@@ -1,0 +1,42 @@
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+
+#include "keyBinds.h"
+
+// the keys that use complex sequence like the arrows
+int escKeys(unsigned char *key){
+    switch(*key){
+        case ARROWS:
+            // if somethin went wrong
+            if (read(STDIN_FILENO, key, 1) != 1) return KEYERROR;
+            switch(*key){
+                // which arror
+                case 'A': return KEY_ARROW_UP;
+                case 'B': return KEY_ARROW_DOWN;
+                case 'C': return KEY_ARROW_RIGHT;
+                case 'D': return KEY_ARROW_LEFT;
+                default: return KEYERROR;
+            }
+    }
+}
+
+// read Keys
+int readKey(void){
+    unsigned char key;
+
+    //waiting an input
+    while(read(STDIN_FILENO, &key, 1) != 1);
+
+    switch(key){
+    //case if it's ESC or a ESC sequence
+    case ESC:
+        if(read(STDIN_FILENO, &key, 1) != 1)return ESC;
+        return escKeys(&key);
+
+    // ctrl + (some letter) cases
+    case KEY_SAVE: return KEY_SAVE; // ctrl + s
+    case KEY_EXIT: return KEY_EXIT; // ctrl + x
+
+    }
+}

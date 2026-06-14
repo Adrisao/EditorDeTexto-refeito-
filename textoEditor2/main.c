@@ -73,19 +73,31 @@ int main(int argc, char *argv[]){
 }
 
 char loop(struct document *doc, struct cursor *cursor){
-     unsigned char key;
-
-    if(read(STDIN_FILENO, &key, 1) == 1){
-        switch(key){
-        case KEY_EXIT:
-            return 0;
-        case KEY_SAVE:
-            printf("- Sistema de salvamento não implementado ainda.\n");
-            fflush(stdout);
-            break;
-        }
+    switch(readKey()){
+    case KEY_EXIT:
+        return 0;
+    case KEY_SAVE:
+        printf("- Sistema de salvamento não implementado ainda.\n");
+        break;
+    case KEY_ARROW_UP:
+        printf("- UP KEY.\n");
+        break;
+    case KEY_ARROW_DOWN:
+        printf("- DOWN KEY.\n");
+        break;
+    case KEY_ARROW_RIGHT:
+        printf("- RIGHT KEY.\n");
+        break;
+    case KEY_ARROW_LEFT:
+        printf("- LEFT KEY.\n");
+        break;
+    case ESC:
+        printf("- ESC KEY.\n");
+        break;
+    case KEYERROR:
+        printf("-KEY ERROR.\n");
+        break;
     }
-
     drawCursor(cursor, flags);
     return 1;
 }
