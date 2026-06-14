@@ -12,7 +12,7 @@ void OpenFile(char *dir, struct document *doc){
     FILE *dataPointer = fopen(dir, "r");
 
     if (dataPointer == NULL){
-        printf("- System: arquivo não encontrado, no caso eu iria criar novo, n foi implementado ainda.\n");
+        printf("- System: arquivo %s não encontrado, no caso eu iria criar novo, n foi implementado ainda.\n", dir);
         return;
     }else{
         printf("- System: Arquivo %s aberto com sucesso.\n", dir);
@@ -58,7 +58,6 @@ void OpenFile(char *dir, struct document *doc){
         }
         doc->totalLines ++;
         before = rn;
-        printf("- Linha encontrada: %s\n", buffer);
     }
 
     fclose(dataPointer);
@@ -83,7 +82,7 @@ void OpenFile(char *dir, struct document *doc){
         doc->totalLines = 1;
         doc->last = doc->first;
 
-        printf("- Arquivo vazil.\n");
+        printf("- Arquivo vazio.\n");
     }
 
     return;
