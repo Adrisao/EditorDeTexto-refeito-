@@ -20,6 +20,8 @@ struct document{
 struct cursor {
     int x;
     int y;
+    int x_try;
+    struct line *currentLine;
 };
 
 #endif

@@ -36,8 +36,9 @@ int main(int argc, char *argv[]){
     doc.totalLines = 0;
     doc.first = NULL;
     doc.last = NULL;
-    cursor.x = 2;
-    cursor.y = 1;
+    cursor.x = 0;
+    cursor.y = 0;
+    cursor.x_try = 0;
 
     // get flags and path
     if (argc > 1) inputData(argc, argv, &file, &flags);
@@ -50,6 +51,8 @@ int main(int argc, char *argv[]){
 
     // open file
     if (file) OpenFile(file, &doc);
+
+    cursor.currentLine = doc.first;
 
     //the -s flag
     if(flags & JUSTSHOW){
@@ -80,16 +83,38 @@ char loop(struct document *doc, struct cursor *cursor){
         printf("- Sistema de salvamento não implementado ainda.\n");
         break;
     case KEY_ARROW_UP:
-        if (cursor->y > 0) cursor->y--;
+        if (cursor->y > 0 && cursor->currentLine->before != NULL){
+            cursor->y--;
+            cursor->currentLine = cursor->currentLine->before;
+
+            //try to keep the x in same position
+            if(cursor->x_try <= cursor->currentLine->size){
+                cursor->x = cursor->x_try;
+            }else{
+                cursor->x = cursor->currentLine->size;
+            }
+        }
         break;
     case KEY_ARROW_DOWN:
-        cursor->y++;
+        if (cursor->currentLine->next != NULL){
+            cursor->y++;
+            cursor->currentLine = cursor->currentLine->next;
+
+            //try to keep the x in same position
+            if(cursor->x_try <= cursor->currentLine->size){
+                cursor->x = cursor->x_try;
+            }else{
+                cursor->x = cursor->currentLine->size;
+            }
+        }
         break;
     case KEY_ARROW_RIGHT:
-        cursor->x++;
+        if (cursor->x < cursor->currentLine->size)cursor->x++;
+        cursor->x_try = cursor->x;
         break;
     case KEY_ARROW_LEFT:
         if(cursor->x > 0) cursor->x--;
+        cursor->x_try = cursor->x;
         break;
     case ESC:
         printf("- ESC KEY.\n");
