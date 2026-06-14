@@ -7,7 +7,7 @@
 // the keys that use complex sequence like the arrows
 int escKeys(unsigned char *key){
     switch(*key){
-        case ARROWS:
+        case ESC_BRACKET:
             // if somethin went wrong
             if (read(STDIN_FILENO, key, 1) != 1) return KEYERROR;
             switch(*key){

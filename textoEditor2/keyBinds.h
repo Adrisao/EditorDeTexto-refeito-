@@ -16,7 +16,7 @@
 
 #define ESC '\x1b'
 
-#define ARROWS '['
+#define ESC_BRACKET '['
 
 // function
 

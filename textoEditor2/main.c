@@ -80,16 +80,16 @@ char loop(struct document *doc, struct cursor *cursor){
         printf("- Sistema de salvamento não implementado ainda.\n");
         break;
     case KEY_ARROW_UP:
-        printf("- UP KEY.\n");
+        if (cursor->y > 0) cursor->y--;
         break;
     case KEY_ARROW_DOWN:
-        printf("- DOWN KEY.\n");
+        cursor->y++;
         break;
     case KEY_ARROW_RIGHT:
-        printf("- RIGHT KEY.\n");
+        cursor->x++;
         break;
     case KEY_ARROW_LEFT:
-        printf("- LEFT KEY.\n");
+        if(cursor->x > 0) cursor->x--;
         break;
     case ESC:
         printf("- ESC KEY.\n");
