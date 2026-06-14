@@ -1,5 +1,4 @@
 #include "flags.h"
-#include <stdio.h>
 
 void inputData(int argc, char *argv[], char **file, enum FlagData *flags){
     for (int i = 1; i < argc; i ++){
@@ -9,12 +8,18 @@ void inputData(int argc, char *argv[], char **file, enum FlagData *flags){
             if (argv[i][1] == '-'){
                 continue;
             }
-            printf("- Rodei aqui tbm.\n");
+
             switch(argv[i][1]){
             case '\n':
                 continue;
             case 'l':
                 *flags |= LINENUMBERS;
+                continue;
+            case 's':
+                *flags |= JUSTSHOW;
+                continue;
+            case 'h':
+                *flags |= HELPFLAG;
                 continue;
             default:
                 continue;

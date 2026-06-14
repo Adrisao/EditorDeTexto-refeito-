@@ -2,7 +2,10 @@
 #define FLAGS
 
 enum FlagData{
-    LINENUMBERS = 1 << 0,
+    LINENUMBERS     = 1 << 0,
+    JUSTSHOW        = 1 << 1,
+    HELPFLAG        = 1 << 2,
+
 };
 
 void inputData(int argc, char *argv[], char **file, enum FlagData *flags);
