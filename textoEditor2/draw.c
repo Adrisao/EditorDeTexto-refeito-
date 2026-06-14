@@ -5,13 +5,19 @@
 #include "structs.h"
 #include "flags.h"
 
+#define COLOR_BLUE "\x1b[34m"
+#define COLOR_RESET "\x1b[0m"
+
+#define CLEAR_SCREEN "\x1b[2J"
+#define CURSOR_HOME  "\x1b[H"
+
 // drawn the text on the screen
 void draw(struct document *doc, int flags){
     struct line *current = doc->first;
 
     // cleaning the screen
-    write(STDOUT_FILENO, "\x1b[2J", 4);
-    write(STDOUT_FILENO, "\x1b[H", 3);
+    write(STDOUT_FILENO, CLEAR_SCREEN, strlen(CLEAR_SCREEN));
+    write(STDOUT_FILENO, CURSOR_HOME, strlen(CURSOR_HOME));
 
     // wrinting again the whole screen
     int line = 0;
@@ -26,7 +32,9 @@ void draw(struct document *doc, int flags){
             }else if (line < 100) {
                 write(STDOUT_FILENO, " ", 1);
             }
+            write(STDOUT_FILENO, COLOR_BLUE, strlen(COLOR_BLUE));
             write(STDOUT_FILENO, n, strlen(n));
+            write(STDOUT_FILENO, COLOR_RESET, strlen(COLOR_RESET));
             write(STDOUT_FILENO, " ", 1);
         }
         write(STDOUT_FILENO, current->buffer, current->size);
