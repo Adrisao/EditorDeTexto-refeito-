@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -55,10 +56,12 @@ void OpenFile(char *dir, struct document *doc){
             rn->before = NULL;
             doc->first = rn;
         }
+        doc->totalLines ++;
         before = rn;
+        printf("- Linha encontrada: %s\n", buffer);
     }
 
-    fclose(datapointer);
+    fclose(dataPointer);
     free(buffer);
 
     if (before){
@@ -77,7 +80,10 @@ void OpenFile(char *dir, struct document *doc){
         doc->first->next = NULL;
         doc->first->before = NULL;
 
+        doc->totalLines = 1;
         doc->last = doc->first;
+
+        printf("- Arquivo vazil.\n");
     }
 
     return;

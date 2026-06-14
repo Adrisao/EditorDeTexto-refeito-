@@ -3,6 +3,6 @@
 
 #include "structs.h"
 
-void OpenFile(char *dir, struct line *firstline);
+void OpenFile(char *dir, struct document *doc);
 
 #endif

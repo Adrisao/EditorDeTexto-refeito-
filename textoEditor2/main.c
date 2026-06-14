@@ -1,6 +1,7 @@
 // libs
 #include <stdlib.h>
 #include <termios.h>
+#include <stdio.h>
 
 // local files
 #include "file.h"
@@ -27,12 +28,24 @@ struct termios original;
 int main(int argc, char *argv[]){
     //important data
     char *file = NULL;
-    struct line firstLine;
+    struct document doc;
+
+    // starting
+    doc.totalLines = 0;
+    doc.first = NULL;
+    doc.last = NULL;
 
     // get flags and path
     if (argc > 1) inputData(argc, argv, &file);
 
     // open file
-    if (file) OpenFile(file, &firstLine);
+    if (file) OpenFile(file, &doc);
+
+    struct line *teste = doc.last;
+
+    while (teste != NULL){
+        printf("- %s\n", teste->buffer);
+        teste = teste->before;
+    }
     return 0;
 }
