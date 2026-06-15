@@ -16,6 +16,14 @@ unsigned short escKeys(unsigned short *key){
                 case 'B': return KEY_ARROW_DOWN;
                 case 'C': return KEY_ARROW_RIGHT;
                 case 'D': return KEY_ARROW_LEFT;
+
+                //del
+                case '3':
+                    if (read(STDIN_FILENO, key, 1) != 1) return KEYERROR;
+                        switch(*key){
+                        case '~':
+                            return DEL;
+                        }
                 default: return KEYERROR;
             }
     }

@@ -110,6 +110,9 @@ char loop(struct document *doc, struct cursor *cursor){
     case BACKSPACE:
         backspace(cursor);
         break;
+    case DEL:
+        del(cursor);
+        break;
     case KEYERROR:
         printf("-KEY ERROR.\n");
         break;

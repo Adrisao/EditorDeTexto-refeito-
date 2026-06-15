@@ -36,3 +36,13 @@ void backspace(struct cursor *cursor){
     cursor->x--;
     return;
 }
+
+void del(struct cursor *cursor){
+    if(cursor->x >= cursor->currentLine->size) return;
+    for(int i = cursor->x; i < cursor->currentLine->size + 1; i++){
+        *(cursor->currentLine->buffer + i) = *(cursor->currentLine->buffer + i + 1);
+    }
+    cursor->currentLine->size--;
+    cursor->x--;
+    return;
+}

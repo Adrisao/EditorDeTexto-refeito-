@@ -14,10 +14,11 @@
 #define KEY_ARROW_LEFT  1002
 #define KEY_ARROW_RIGHT 1003
 
-#define ESC '\x1b'
-#define BACKSPACE '\x7f'
+#define ESC             '\x1b'
+#define BACKSPACE       '\x7f'
+#define DEL             1004
 
-#define ESC_BRACKET '['
+#define ESC_BRACKET     '['
 
 // function
 
