@@ -15,6 +15,7 @@
 #define KEY_ARROW_RIGHT 1003
 
 #define ESC '\x1b'
+#define BACKSPACE '\x7f'
 
 #define ESC_BRACKET '['
 

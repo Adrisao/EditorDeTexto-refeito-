@@ -26,3 +26,13 @@ void insert(unsigned short key, struct cursor *cursor){
     cursor->x ++;
     return;
 }
+
+void backspace(struct cursor *cursor){
+    if (cursor->x == 0) return;
+    for(int i = cursor->x-1; i < cursor->currentLine->size + 1; i++){
+        *(cursor->currentLine->buffer + i) = *(cursor->currentLine->buffer + i + 1);
+    }
+    cursor->currentLine->size--;
+    cursor->x--;
+    return;
+}

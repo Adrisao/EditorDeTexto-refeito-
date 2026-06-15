@@ -107,8 +107,8 @@ char loop(struct document *doc, struct cursor *cursor){
         if(cursor->x > 0) cursor->x--;
         cursor->x_try = cursor->x;
         break;
-    case ESC:
-        printf("- ESC KEY.\n");
+    case BACKSPACE:
+        backspace(cursor);
         break;
     case KEYERROR:
         printf("-KEY ERROR.\n");
