@@ -118,6 +118,7 @@ char loop(struct document *doc, struct cursor *cursor){
         insert(key, cursor);
         break;
     }
+    draw(doc, flags);
     drawCursor(cursor, flags);
     return 1;
 }
