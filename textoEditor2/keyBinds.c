@@ -48,5 +48,7 @@ unsigned short readKey(void){
 
     // normal keys
     case BACKSPACE: return BACKSPACE;
+    case ENTER: return ENTER;
+    case ENTER2: return ENTER2;
     }
 }

@@ -20,6 +20,9 @@
 
 #define ESC_BRACKET     '['
 
+#define ENTER           '\r'
+#define ENTER2          '\n'
+
 // function
 
 unsigned short readKey(void);

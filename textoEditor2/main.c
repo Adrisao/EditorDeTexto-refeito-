@@ -116,6 +116,12 @@ char loop(struct document *doc, struct cursor *cursor){
     case KEYERROR:
         printf("-KEY ERROR.\n");
         break;
+    case ENTER:
+        newLineFunction(cursor, doc);
+        break;
+    case ENTER2:
+        printf("-ENTER2.");
+        break;
     default:
         if(flags & READONLY) break;
         insert(key, cursor);
