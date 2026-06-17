@@ -100,11 +100,23 @@ char loop(struct document *doc, struct cursor *cursor){
         }
         break;
     case KEY_ARROW_RIGHT:
-        if (cursor->x < cursor->currentLine->size)cursor->x++;
+        if (cursor->x < cursor->currentLine->size){cursor->x++;
+        }else if(cursor->currentLine->next != NULL){
+            // go to the next line
+            cursor->y ++;
+            cursor->currentLine = cursor->currentLine->next;
+            cursor->x = 0;
+        }
         cursor->x_try = cursor->x;
         break;
     case KEY_ARROW_LEFT:
-        if(cursor->x > 0) cursor->x--;
+        if(cursor->x > 0){cursor->x--;
+        }else if (cursor->currentLine->before != NULL){
+            //come back to the previous line
+            cursor->y --;
+            cursor->currentLine = cursor->currentLine->before;
+            cursor->x = cursor->currentLine->size;
+        }
         cursor->x_try = cursor->x;
         break;
     case BACKSPACE:

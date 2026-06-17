@@ -18,6 +18,10 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc){
     // if it's the first line
     if (cursor->currentLine->before == NULL) return;
 
+    //updating cursor data
+    cursor->x = cursor->currentLine->before->size;
+    cursor->y --;
+
     // important data and realloc
     int newSize = cursor->currentLine->size + cursor->currentLine->before->size;
     int newCapacity = newSize + 5;
@@ -33,6 +37,7 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc){
     // updating the data
     currentLine->before->size = newSize;
     currentLine->before->capacity = newCapacity;
+    doc->totalLines--;
 
     // changing the pointers
     if(currentLine->next != NULL){
@@ -43,9 +48,7 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc){
         doc->last = currentLine->before;
     }
 
-    //updating cursor data
-    cursor->x = currentLine->before->size;
-    cursor->y --;
+    // updating the current line
     cursor->currentLine = currentLine->before;
 
     // NO I HAVEN'T FORGOTTEN THE FREE AHHHHH
