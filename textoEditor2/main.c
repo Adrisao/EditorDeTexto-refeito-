@@ -108,7 +108,10 @@ char loop(struct document *doc, struct cursor *cursor){
         cursor->x_try = cursor->x;
         break;
     case BACKSPACE:
-        backspace(cursor);
+        if(cursor->x == 0){
+            deleteLineFunction(cursor, doc);
+            printf("-DELETAR LINHA");
+        }else backspace(cursor);
         break;
     case DEL:
         del(cursor);

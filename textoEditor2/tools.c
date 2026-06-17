@@ -14,6 +14,46 @@ void fixCursorX(struct cursor *cursor){
     }
 }
 
+void deleteLineFunction(struct cursor *cursor, struct document *doc){
+    // if it's the first line
+    if (cursor->currentLine->before == NULL) return;
+
+    // important data and realloc
+    int newSize = cursor->currentLine->size + cursor->currentLine->before->size;
+    int newCapacity = newSize + 5;
+    cursor->currentLine->before->buffer = realloc(cursor->currentLine->before->buffer,
+                                                     sizeof(char) * newCapacity);
+    struct line *currentLine = cursor->currentLine;
+
+    //  the i starts at \0 from previous line
+    for(int i = currentLine->before->size, j = 0; i <= newSize; i++, j++){
+        *(currentLine->before->buffer + i) = *(currentLine->buffer + j);
+    }
+
+    // updating the data
+    currentLine->before->size = newSize;
+    currentLine->before->capacity = newCapacity;
+
+    // changing the pointers
+    if(currentLine->next != NULL){
+        currentLine->before->next = currentLine->next;
+        currentLine->next->before = currentLine->before;
+    }else{
+        currentLine->before->next = NULL;
+        doc->last = currentLine->before;
+    }
+
+    //updating cursor data
+    cursor->x = currentLine->before->size;
+    cursor->y --;
+    cursor->currentLine = currentLine->before;
+
+    // NO I HAVEN'T FORGOTTEN THE FREE AHHHHH
+    free(currentLine->buffer);
+    free(currentLine);
+    return;
+}
+
 //new line function
 void newLineFunction(struct cursor *cursor, struct document *doc){
     // create a new line struct, the NEWLINE
@@ -22,22 +62,10 @@ void newLineFunction(struct cursor *cursor, struct document *doc){
     int sizeCP = cursor->currentLine->size - cursor->x + 1;
     newLine->buffer = (char *) malloc(sizeof(char) * sizeCP + 10);
 
-    printf(
-        "line=[%s] size=%d cursor=%d capacity=%d\n",
-        cursor->currentLine->buffer,
-        cursor->currentLine->size,
-        cursor->x,
-        cursor->currentLine->capacity
-    );
     // copy the line after the cursor
     for (int i = cursor->x, j = 0; j < sizeCP; i ++, j++){
         *(newLine->buffer + j) = *(cursor->currentLine->buffer + i);
     }
-
-    printf(
-    "new=[%s]\n",
-    newLine->buffer
-    );
 
     //sleep(5);
     cursor->currentLine->buffer[cursor->x] = '\0';
