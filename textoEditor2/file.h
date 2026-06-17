@@ -3,7 +3,7 @@
 
 #include "structs.h"
 
-void OpenFile(char *dir, struct document *doc);
+void OpenFile(char *dir, struct document *doc, struct whereWin *ws);
 
 void saveFile(struct document *doc, const char *path);
 

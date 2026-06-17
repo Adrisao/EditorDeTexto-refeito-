@@ -12,8 +12,8 @@
 #define CURSOR_HOME  "\x1b[H"
 
 // draw the text on the screen
-void draw(struct document *doc, int flags){
-    struct line *current = doc->first;
+void draw(struct whereWin *ws, int flags){
+    struct line *current = ws->currentDraw;
 
     // cleaning the screen
     if(!(flags & JUSTSHOW)){

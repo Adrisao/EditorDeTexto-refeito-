@@ -1,7 +1,7 @@
 #ifndef KEYBINDS
-#define KETBINDS
+#define KEYBINDS
 
-#define KEYERROR 999999
+#define KEYERROR 999
 
 // key binds
 #define CTRL_KEY(k) ((k) & 0x1f)

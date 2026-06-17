@@ -130,3 +130,51 @@ void freeDocument(struct document *doc){
     }
     return;
 }
+
+// cursor functions
+
+void moveCursorUp(struct cursor *cursor){
+    if (cursor->y > 0 && cursor->currentLine->before != NULL){
+        cursor->y--;
+        cursor->currentLine = cursor->currentLine->before;
+    }else{
+        cursor->x = 0;
+        cursor->x_try = 0;
+    }
+    fixCursorX(cursor);
+}
+
+void moveCursorDown(struct cursor *cursor){
+    if (cursor->currentLine->next != NULL){
+        cursor->y++;
+        cursor->currentLine = cursor->currentLine->next;
+    }else{
+        cursor->x = cursor->currentLine->size;
+        cursor->x_try = cursor->x;
+    }
+    fixCursorX(cursor);
+}
+
+void moveCursorRight(struct cursor *cursor){
+    if (cursor->x < cursor->currentLine->size){
+        cursor->x++;
+    }else if(cursor->currentLine->next != NULL){
+        // go to the next line
+        cursor->y ++;
+        cursor->currentLine = cursor->currentLine->next;
+        cursor->x = 0;
+    }
+    cursor->x_try = cursor->x;
+}
+
+void moveCursorLeft(struct cursor *cursor){
+    if(cursor->x > 0){
+        cursor->x--;
+    }else if (cursor->currentLine->before != NULL){
+        //come back to the previous line
+        cursor->y --;
+        cursor->currentLine = cursor->currentLine->before;
+        cursor->x = cursor->currentLine->size;
+    }
+    cursor->x_try = cursor->x;
+}

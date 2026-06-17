@@ -7,14 +7,9 @@
 #include "structs.h"
 
 //oppening file
-void OpenFile(char *dir, struct document *doc){
+void OpenFile(char *dir, struct document *doc, struct whereWin *ws){
     // oppening file
     FILE *dataPointer = fopen(dir, "r");
-
-    if (dataPointer == NULL){
-        printf("- System: arquivo %s não encontrado, no caso eu iria criar novo, n foi implementado ainda.\n", dir);
-        return;
-    }
 
     // getting lines
     char *buffer = NULL;
@@ -77,12 +72,14 @@ void OpenFile(char *dir, struct document *doc){
         doc->first->next = NULL;
         doc->first->before = NULL;
 
+        // adding the document data
         doc->totalLines = 1;
         doc->last = doc->first;
 
         printf("- Arquivo vazio.\n");
     }
 
+    ws->currentDraw = doc->first;
     return;
 }
 

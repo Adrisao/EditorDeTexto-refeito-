@@ -3,6 +3,7 @@
 #include <termios.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 // local files
 #include "file.h"
@@ -14,6 +15,7 @@
 #include "keyBinds.h"
 #include "tools.h"
 #include "editor.h"
+#include "loop.h"
 
 enum FlagData flags;
 
@@ -25,7 +27,7 @@ void restoreTerminal(void){
     return;
 }
 
-char loop(struct document *doc, struct cursor *cursor, const char *path);
+//char loop(struct document *doc, struct cursor *cursor, const char *path, struct whereWin *ws);
 
 // main function
 int main(int argc, char *argv[]){
@@ -33,6 +35,10 @@ int main(int argc, char *argv[]){
     char *file = NULL;
     struct document doc;
     struct cursor cursor;
+    struct whereWin ws;
+
+    // get the sizes
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
 
     // starting
     doc.totalLines = 0;
@@ -52,13 +58,13 @@ int main(int argc, char *argv[]){
     }
 
     // open file
-    if (file) OpenFile(file, &doc);
+    if (file) OpenFile(file, &doc, &ws);
 
     cursor.currentLine = doc.first;
 
     //the -s flag
     if(flags & JUSTSHOW){
-        draw(&doc, flags);
+        draw(&ws, flags);
         return 0;
     }
 
@@ -67,97 +73,15 @@ int main(int argc, char *argv[]){
     atexit(restoreTerminal);
 
     // first draw
-    draw(&doc, flags);
+    draw(&ws, flags);
     drawCursor(&cursor, flags);
 
     //main loop
-    while (loop(&doc, &cursor, file));
+    while (loop(&doc, &cursor, file, &ws, flags));
 
     disableRawMode(&original);
 
     freeDocument(&doc);
 
     return 0;
-}
-
-char loop(struct document *doc, struct cursor *cursor, const char *path){
-    unsigned short key = readKey();
-    unsigned char didntIrun = 0;
-    switch(key){
-    case KEY_EXIT:
-        return 0;
-    case KEY_ARROW_UP:
-        if (cursor->y > 0 && cursor->currentLine->before != NULL){
-            cursor->y--;
-            cursor->currentLine = cursor->currentLine->before;
-            fixCursorX(cursor);
-        }
-        break;
-    case KEY_ARROW_DOWN:
-        if (cursor->currentLine->next != NULL){
-            cursor->y++;
-            cursor->currentLine = cursor->currentLine->next;
-            fixCursorX(cursor);
-        }
-        break;
-    case KEY_ARROW_RIGHT:
-        if (cursor->x < cursor->currentLine->size){cursor->x++;
-        }else if(cursor->currentLine->next != NULL){
-            // go to the next line
-            cursor->y ++;
-            cursor->currentLine = cursor->currentLine->next;
-            cursor->x = 0;
-        }
-        cursor->x_try = cursor->x;
-        break;
-    case KEY_ARROW_LEFT:
-        if(cursor->x > 0){cursor->x--;
-        }else if (cursor->currentLine->before != NULL){
-            //come back to the previous line
-            cursor->y --;
-            cursor->currentLine = cursor->currentLine->before;
-            cursor->x = cursor->currentLine->size;
-        }
-        cursor->x_try = cursor->x;
-        break;
-    default:
-        didntIrun = 1;
-        break;
-    }
-    if (!(flags & READONLY) && didntIrun){
-        switch (key){
-        case KEY_SAVE:
-            saveFile(doc, path);
-            break;
-        case BACKSPACE:
-            if(cursor->x == 0){
-                deleteLineFunction(cursor, doc);
-            }else backspace(cursor);
-                break;
-        case DEL:
-            del(cursor);
-            break;
-        case KEYERROR:
-            printf("-KEY ERROR.\n");
-            break;
-        case ENTER:
-            newLineFunction(cursor, doc);
-            break;
-        case ENTER2:
-            printf("-ENTER2.");
-            break;
-        case KEY_TAB:
-            #define TAB_SIZE 4
-            for(int i = 0; i < TAB_SIZE; i++)insert(' ', cursor);
-            break;
-        default:
-            insert(key, cursor);
-            break;
-        }
-    }else{
-        printf("-READ ONLY.\n");
-    }
-    draw(doc, flags);
-    drawCursor(cursor, flags);
-    return 1;
 }

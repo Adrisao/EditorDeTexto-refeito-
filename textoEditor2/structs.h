@@ -11,9 +11,10 @@ struct line{
 };
 
 struct document{
+    struct line *currentDraw;
+
     struct line *first;
     struct line *last;
-
     int totalLines;
 };
 
@@ -24,4 +25,9 @@ struct cursor {
     struct line *currentLine;
 };
 
+struct whereWin{
+    struct line *currentDraw;
+    unsigned int y;
+    unsigned int x;
+};
 #endif

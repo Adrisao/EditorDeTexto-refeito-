@@ -26,7 +26,10 @@ unsigned short escKeys(unsigned short *key){
                         }
                 default: return KEYERROR;
             }
+    default:
+        return KEYERROR;
     }
+    return 'X';
 }
 
 // read Keys
