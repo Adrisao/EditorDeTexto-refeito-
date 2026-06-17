@@ -5,4 +5,6 @@
 
 void OpenFile(char *dir, struct document *doc);
 
+void saveFile(struct document *doc, const char *path);
+
 #endif

@@ -117,3 +117,16 @@ void newLineFunction(struct cursor *cursor, struct document *doc){
     cursor->y++;
     cursor->x = 0;
 }
+
+void freeDocument(struct document *doc){
+    struct line *current = doc->first;
+    struct line *next = NULL;
+
+    while(current != NULL){
+        next = current->next;
+        free(current->buffer);
+        free(current);
+        current = next;
+    }
+    return;
+}

@@ -25,7 +25,7 @@ void restoreTerminal(void){
     return;
 }
 
-char loop(struct document *doc, struct cursor *cursor);
+char loop(struct document *doc, struct cursor *cursor, const char *path);
 
 // main function
 int main(int argc, char *argv[]){
@@ -71,19 +71,22 @@ int main(int argc, char *argv[]){
     drawCursor(&cursor, flags);
 
     //main loop
-    while (loop(&doc, &cursor));
+    while (loop(&doc, &cursor, file));
 
     disableRawMode(&original);
+
+    freeDocument(&doc);
+
     return 0;
 }
 
-char loop(struct document *doc, struct cursor *cursor){
+char loop(struct document *doc, struct cursor *cursor, const char *path){
     unsigned short key = readKey();
     switch(key){
     case KEY_EXIT:
         return 0;
     case KEY_SAVE:
-        printf("- Sistema de salvamento não implementado ainda.\n");
+        saveFile(doc, path);
         break;
     case KEY_ARROW_UP:
         if (cursor->y > 0 && cursor->currentLine->before != NULL){

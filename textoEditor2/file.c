@@ -85,3 +85,21 @@ void OpenFile(char *dir, struct document *doc){
 
     return;
 }
+
+void saveFile(struct document *doc, const char *path){
+    FILE *file = fopen(path, "w");
+
+    if (file == NULL) return;
+
+    struct line *current = doc->first;
+
+    while (current != NULL){
+        fputs(current->buffer, file);
+
+        if(current->next != NULL) fputc('\n', file);
+
+        current = current->next;
+    }
+    fclose(file);
+    return;
+}
