@@ -22,6 +22,7 @@
 
 #define ENTER           '\r'
 #define ENTER2          '\n'
+#define KEY_TAB         '\t'
 
 // function
 

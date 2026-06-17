@@ -82,12 +82,10 @@ int main(int argc, char *argv[]){
 
 char loop(struct document *doc, struct cursor *cursor, const char *path){
     unsigned short key = readKey();
+    unsigned char didntIrun = 0;
     switch(key){
     case KEY_EXIT:
         return 0;
-    case KEY_SAVE:
-        saveFile(doc, path);
-        break;
     case KEY_ARROW_UP:
         if (cursor->y > 0 && cursor->currentLine->before != NULL){
             cursor->y--;
@@ -122,28 +120,42 @@ char loop(struct document *doc, struct cursor *cursor, const char *path){
         }
         cursor->x_try = cursor->x;
         break;
-    case BACKSPACE:
-        if(cursor->x == 0){
-            deleteLineFunction(cursor, doc);
-            printf("-DELETAR LINHA");
-        }else backspace(cursor);
-        break;
-    case DEL:
-        del(cursor);
-        break;
-    case KEYERROR:
-        printf("-KEY ERROR.\n");
-        break;
-    case ENTER:
-        newLineFunction(cursor, doc);
-        break;
-    case ENTER2:
-        printf("-ENTER2.");
-        break;
     default:
-        if(flags & READONLY) break;
-        insert(key, cursor);
+        didntIrun = 1;
         break;
+    }
+    if (!(flags & READONLY) && didntIrun){
+        switch (key){
+        case KEY_SAVE:
+            saveFile(doc, path);
+            break;
+        case BACKSPACE:
+            if(cursor->x == 0){
+                deleteLineFunction(cursor, doc);
+            }else backspace(cursor);
+                break;
+        case DEL:
+            del(cursor);
+            break;
+        case KEYERROR:
+            printf("-KEY ERROR.\n");
+            break;
+        case ENTER:
+            newLineFunction(cursor, doc);
+            break;
+        case ENTER2:
+            printf("-ENTER2.");
+            break;
+        case KEY_TAB:
+            #define TAB_SIZE 4
+            for(int i = 0; i < TAB_SIZE; i++)insert(' ', cursor);
+            break;
+        default:
+            insert(key, cursor);
+            break;
+        }
+    }else{
+        printf("-READ ONLY.\n");
     }
     draw(doc, flags);
     drawCursor(cursor, flags);

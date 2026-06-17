@@ -46,9 +46,7 @@ unsigned short readKey(void){
     case KEY_SAVE: return KEY_SAVE; // ctrl + s
     case KEY_EXIT: return KEY_EXIT; // ctrl + x
 
-    // normal keys
-    case BACKSPACE: return BACKSPACE;
-    case ENTER: return ENTER;
-    case ENTER2: return ENTER2;
-    }
+    default:
+        return key;
+   }
 }
