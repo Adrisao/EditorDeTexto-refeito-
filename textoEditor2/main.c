@@ -46,6 +46,7 @@ int main(int argc, char *argv[]){
     doc.totalLines = 0;
     doc.first = NULL;
     doc.last = NULL;
+    doc.totalLines = 0;
     cursor.x = 0;
     cursor.y = 0;
     cursor.x_try = 0;
@@ -65,6 +66,7 @@ int main(int argc, char *argv[]){
     if (file) OpenFile(file, &doc, &ws);
 
     cursor.currentLine = doc.first;
+    ws.currentDraw = doc.first;
 
     //the -s flag
     if(flags & JUSTSHOW){
@@ -80,7 +82,6 @@ int main(int argc, char *argv[]){
     draw(&ws, flags, &wn, &line);
     drawCursor(&ws, flags);
 
-    printf("SCREEN: X = %d, Y = %d", 0, wn.ws_row);
     //main loop
     while (loop(&doc, &cursor, file, &ws, flags, &wn, &line));
 

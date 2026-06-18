@@ -65,8 +65,11 @@ void OpenFile(char *dir, struct document *doc, struct whereWin *ws){
             printf("- System: O man compra memoria ram ai pro teu pc.\n");
             return;
         }
+ 
         // starting the struct
-        doc->first->buffer = NULL;
+        doc->first->buffer = malloc(sizeof(char) * 1);
+        if (doc->first->buffer == NULL) return;
+        doc->first->buffer[0] = '\0';
         doc->first->size = 0;
         doc->first->capacity = 0;
         doc->first->next = NULL;

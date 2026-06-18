@@ -15,7 +15,7 @@ void fixCursorX(struct cursor *cursor){
     }
 }
 
-void deleteLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws){
+void deleteLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws, struct winsize *wn, int *line){
     // if it's the first line
     if (cursor->currentLine->before == NULL) return;
 
@@ -23,7 +23,6 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc, struct wher
     cursor->x = cursor->currentLine->before->size;
     cursor->y --;
     ws->x = cursor->x;
-    ws->y--;
 
     // important data and realloc
     int newSize = cursor->currentLine->size + cursor->currentLine->before->size;
@@ -50,6 +49,14 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc, struct wher
         currentLine->before->next = NULL;
         doc->last = currentLine->before;
     }
+
+    if (ws->y <= 0){
+            if(ws->currentDraw->before != NULL)ws->currentDraw = ws->currentDraw->before;
+            ws->y = 0;
+            (*line)--;
+        }else{
+            ws->y --;
+        }
 
     // updating the current line
     cursor->currentLine = currentLine->before;
@@ -192,14 +199,18 @@ void moveCursorRight(struct cursor *cursor, struct whereWin *ws, struct winsize 
         ws->x ++;
     }else if(cursor->currentLine->next != NULL){
         // go to the next line
-
-        // ARRUMAR OS DOIS QUE N TÃO INDO CERTO PRA PROXIMA LINHA (LEFT E RIGHT)
         cursor->y ++;
-        ws->y ++;
         cursor->currentLine = cursor->currentLine->next;
         cursor->x = 0;
         ws->x = 0;
-        (*line) ++;
+
+        if (ws->y >= wn->ws_row - DOWNBAR_SIZE-1){
+            ws->currentDraw = ws->currentDraw->next;
+            ws->y = wn->ws_row - DOWNBAR_SIZE-1;
+            (*line)++;
+        }else{
+            ws->y ++;
+        }
     }
     cursor->x_try = cursor->x;
 }
@@ -211,11 +222,17 @@ void moveCursorLeft(struct cursor *cursor, struct whereWin *ws, struct winize *w
     }else if (cursor->currentLine->before != NULL){
         //come back to the previous line
         cursor->y --;
-        ws->y --;
         cursor->currentLine = cursor->currentLine->before;
+
+        if (ws->y <= 0){
+            if(ws->currentDraw->before != NULL)ws->currentDraw = ws->currentDraw->before;
+            ws->y = 0;
+            (*line)--;
+        }else{
+            ws->y --;
+        }
         cursor->x = cursor->currentLine->size;
         ws->x = cursor->x;
-        (*line) --;
     }
     cursor->x_try = cursor->x;
 }

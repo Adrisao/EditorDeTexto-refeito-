@@ -45,7 +45,7 @@ char loop(struct document *doc, struct cursor *cursor, const char *path, struct 
             break;
         case BACKSPACE:
             if(cursor->x == 0){
-                deleteLineFunction(cursor, doc, ws);
+                deleteLineFunction(cursor, doc, ws, wn, line);
             }else backspace(cursor, ws);
                 break;
         case DEL:
