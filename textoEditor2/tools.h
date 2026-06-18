@@ -2,7 +2,7 @@
 #define TOOLSH
 
 void fixCursorX(struct cursor *cursor);
-void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws);
+void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws, struct winsize *wn, int *line);
 void deleteLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws);
 void freeDocument(struct document *doc);
 

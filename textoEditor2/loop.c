@@ -55,7 +55,7 @@ char loop(struct document *doc, struct cursor *cursor, const char *path, struct 
             printf("-KEY ERROR.\n");
             break;
         case ENTER:
-            newLineFunction(cursor, doc, ws);
+            newLineFunction(cursor, doc, ws, wn, line);
             break;
         case ENTER2:
             printf("-ENTER2.");

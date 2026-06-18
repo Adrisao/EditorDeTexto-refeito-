@@ -61,7 +61,7 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc, struct wher
 }
 
 //new line function
-void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws){
+void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws, struct winsize *wn, int *line){
     // create a new line struct, the NEWLINE
     struct line *newLine = (struct line *) malloc(sizeof(struct line));
     //how much chars do i need to copy
@@ -119,7 +119,14 @@ void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWi
     // updating the cursor
     cursor->y++;
     cursor->x = 0;
-    ws->y++;
+
+    if (ws->y >= wn->ws_row - DOWNBAR_SIZE-1){
+            ws->currentDraw = ws->currentDraw->next;
+            ws->y = wn->ws_row - DOWNBAR_SIZE-1;
+            (*line)++;
+        }else{
+            ws->y ++;
+    }
     ws->x = 0;
 }
 
