@@ -80,6 +80,8 @@ void OpenFile(char *dir, struct document *doc, struct whereWin *ws){
     }
 
     ws->currentDraw = doc->first;
+    ws->y = 0;
+    ws->x = 0;
     return;
 }
 

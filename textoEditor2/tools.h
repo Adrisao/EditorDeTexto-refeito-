@@ -2,13 +2,13 @@
 #define TOOLSH
 
 void fixCursorX(struct cursor *cursor);
-void newLineFunction(struct cursor *cursor, struct document *doc);
-void deleteLineFunction(struct cursor *cursor, struct document *doc);
+void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws);
+void deleteLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws);
 void freeDocument(struct document *doc);
 
-void moveCursorUp(struct cursor *cursor);
-void moveCursorDown(struct cursor *cursor);
-void moveCursorRight(struct cursor *cursor);
-void moveCursorLeft(struct cursor *cursor);
+void moveCursorUp(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line);
+void moveCursorDown(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line);
+void moveCursorRight(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line);
+void moveCursorLeft(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line);
 
 #endif

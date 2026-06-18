@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 
 // the visual cursor position
 void fixCursorX(struct cursor *cursor){
@@ -14,13 +15,15 @@ void fixCursorX(struct cursor *cursor){
     }
 }
 
-void deleteLineFunction(struct cursor *cursor, struct document *doc){
+void deleteLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws){
     // if it's the first line
     if (cursor->currentLine->before == NULL) return;
 
     //updating cursor data
     cursor->x = cursor->currentLine->before->size;
     cursor->y --;
+    ws->x = cursor->x;
+    ws->y--;
 
     // important data and realloc
     int newSize = cursor->currentLine->size + cursor->currentLine->before->size;
@@ -58,7 +61,7 @@ void deleteLineFunction(struct cursor *cursor, struct document *doc){
 }
 
 //new line function
-void newLineFunction(struct cursor *cursor, struct document *doc){
+void newLineFunction(struct cursor *cursor, struct document *doc, struct whereWin *ws){
     // create a new line struct, the NEWLINE
     struct line *newLine = (struct line *) malloc(sizeof(struct line));
     //how much chars do i need to copy
@@ -116,6 +119,8 @@ void newLineFunction(struct cursor *cursor, struct document *doc){
     // updating the cursor
     cursor->y++;
     cursor->x = 0;
+    ws->y++;
+    ws->x = 0;
 }
 
 void freeDocument(struct document *doc){
@@ -133,48 +138,77 @@ void freeDocument(struct document *doc){
 
 // cursor functions
 
-void moveCursorUp(struct cursor *cursor){
+void moveCursorUp(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line){
     if (cursor->y > 0 && cursor->currentLine->before != NULL){
+
+        if (ws->y <= 0){
+            if(ws->currentDraw->before != NULL)ws->currentDraw = ws->currentDraw->before;
+            ws->y = 0;
+            (*line)--;
+        }else{
+            ws->y --;
+        }
         cursor->y--;
         cursor->currentLine = cursor->currentLine->before;
+
     }else{
         cursor->x = 0;
         cursor->x_try = 0;
     }
     fixCursorX(cursor);
+    ws->x = cursor->x;
 }
 
-void moveCursorDown(struct cursor *cursor){
+void moveCursorDown(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line){
     if (cursor->currentLine->next != NULL){
         cursor->y++;
         cursor->currentLine = cursor->currentLine->next;
+
+        if (ws->y >= wn->ws_row - DOWNBAR_SIZE-1){
+            ws->currentDraw = ws->currentDraw->next;
+            ws->y = wn->ws_row - DOWNBAR_SIZE-1;
+            (*line)++;
+        }else{
+            ws->y ++;
+        }
     }else{
         cursor->x = cursor->currentLine->size;
         cursor->x_try = cursor->x;
     }
     fixCursorX(cursor);
+    ws->x = cursor->x;
 }
 
-void moveCursorRight(struct cursor *cursor){
+void moveCursorRight(struct cursor *cursor, struct whereWin *ws, struct winsize *wn, int *line){
     if (cursor->x < cursor->currentLine->size){
         cursor->x++;
+        ws->x ++;
     }else if(cursor->currentLine->next != NULL){
         // go to the next line
+
+        // ARRUMAR OS DOIS QUE N TÃO INDO CERTO PRA PROXIMA LINHA (LEFT E RIGHT)
         cursor->y ++;
+        ws->y ++;
         cursor->currentLine = cursor->currentLine->next;
         cursor->x = 0;
+        ws->x = 0;
+        (*line) ++;
     }
     cursor->x_try = cursor->x;
 }
 
-void moveCursorLeft(struct cursor *cursor){
+void moveCursorLeft(struct cursor *cursor, struct whereWin *ws, struct winize *wn, int *line){
     if(cursor->x > 0){
         cursor->x--;
+        ws->x --;
     }else if (cursor->currentLine->before != NULL){
         //come back to the previous line
         cursor->y --;
+        ws->y --;
         cursor->currentLine = cursor->currentLine->before;
         cursor->x = cursor->currentLine->size;
+        ws->x = cursor->x;
+        (*line) --;
     }
     cursor->x_try = cursor->x;
 }

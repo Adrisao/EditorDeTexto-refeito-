@@ -35,10 +35,12 @@ int main(int argc, char *argv[]){
     char *file = NULL;
     struct document doc;
     struct cursor cursor;
+    struct winsize wn;
     struct whereWin ws;
+    int line = 1;
 
     // get the sizes
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &wn);
 
     // starting
     doc.totalLines = 0;
@@ -47,6 +49,8 @@ int main(int argc, char *argv[]){
     cursor.x = 0;
     cursor.y = 0;
     cursor.x_try = 0;
+    ws.x = 0;
+    ws.y = 0;
 
     // get flags and path
     if (argc > 1) inputData(argc, argv, &file, &flags);
@@ -64,7 +68,7 @@ int main(int argc, char *argv[]){
 
     //the -s flag
     if(flags & JUSTSHOW){
-        draw(&ws, flags);
+        draw(&ws, flags, &wn, &line);
         return 0;
     }
 
@@ -73,11 +77,12 @@ int main(int argc, char *argv[]){
     atexit(restoreTerminal);
 
     // first draw
-    draw(&ws, flags);
-    drawCursor(&cursor, flags);
+    draw(&ws, flags, &wn, &line);
+    drawCursor(&ws, flags);
 
+    printf("SCREEN: X = %d, Y = %d", 0, wn.ws_row);
     //main loop
-    while (loop(&doc, &cursor, file, &ws, flags));
+    while (loop(&doc, &cursor, file, &ws, flags, &wn, &line));
 
     disableRawMode(&original);
 

@@ -16,23 +16,23 @@
 #include "tools.h"
 #include "editor.h"
 
-char loop(struct document *doc, struct cursor *cursor, const char *path, struct whereWin *ws, enum FlagData flags){
+char loop(struct document *doc, struct cursor *cursor, const char *path, struct whereWin *ws, enum FlagData flags, struct winsize *wn, int *line){
     unsigned short key = readKey();
     unsigned char didntIrun = 0;
     switch(key){
     case KEY_EXIT:
         return 0;
     case KEY_ARROW_UP:
-        moveCursorUp(cursor);
+        moveCursorUp(cursor, ws, wn, line);
         break;
     case KEY_ARROW_DOWN:
-        moveCursorDown(cursor);
+        moveCursorDown(cursor, ws, wn, line);
         break;
     case KEY_ARROW_RIGHT:
-        moveCursorRight(cursor);
+        moveCursorRight(cursor, ws, wn, line);
         break;
     case KEY_ARROW_LEFT:
-        moveCursorLeft(cursor);
+        moveCursorLeft(cursor, ws, wn, line);
         break;
     default:
         didntIrun = 1;
@@ -45,33 +45,33 @@ char loop(struct document *doc, struct cursor *cursor, const char *path, struct 
             break;
         case BACKSPACE:
             if(cursor->x == 0){
-                deleteLineFunction(cursor, doc);
-            }else backspace(cursor);
+                deleteLineFunction(cursor, doc, ws);
+            }else backspace(cursor, ws);
                 break;
         case DEL:
-            del(cursor);
+            del(cursor, ws);
             break;
         case KEYERROR:
             printf("-KEY ERROR.\n");
             break;
         case ENTER:
-            newLineFunction(cursor, doc);
+            newLineFunction(cursor, doc, ws);
             break;
         case ENTER2:
             printf("-ENTER2.");
             break;
         case KEY_TAB:
             #define TAB_SIZE 4
-            for(int i = 0; i < TAB_SIZE; i++)insert(' ', cursor);
+            for(int i = 0; i < TAB_SIZE; i++)insert(' ', cursor, ws);
             break;
         default:
-            insert(key, cursor);
+            insert(key, cursor, ws);
             break;
         }
     }else{
         printf("-READ ONLY.\n");
     }
-    draw(ws, flags);
-    drawCursor(cursor, flags);
+    draw(ws, flags, wn, line);
+    drawCursor(ws, flags);
     return 1;
 }

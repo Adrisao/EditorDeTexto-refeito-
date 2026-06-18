@@ -1,6 +1,8 @@
 #ifndef STRUCTS_FILE
 #define STRUCTS_FILE
 
+#define DOWNBAR_SIZE 3
+
 struct line{
     char *buffer;
     int capacity;
@@ -27,7 +29,7 @@ struct cursor {
 
 struct whereWin{
     struct line *currentDraw;
-    unsigned int y;
-    unsigned int x;
+    int y;
+    int x;
 };
 #endif

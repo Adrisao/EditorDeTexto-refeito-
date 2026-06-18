@@ -1,7 +1,7 @@
 #ifndef DRAWNFUNC
 #define DRAWNFUNC
 
-void draw(struct whereWin *ws, int flags);
-void drawCursor(struct cursor *cursor, int flags);
+void draw(struct whereWin *ws, int flags, struct winsize *wn, int *line);
+void drawCursor(struct whereWin *ws, int flags);
 
 #endif
