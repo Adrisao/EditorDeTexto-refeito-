@@ -8,6 +8,7 @@
 
 //oppening file
 void OpenFile(char *dir, struct document *doc, struct whereWin *ws){
+
     // oppening file
     FILE *dataPointer = fopen(dir, "r");
 
@@ -16,6 +17,24 @@ void OpenFile(char *dir, struct document *doc, struct whereWin *ws){
     size_t capacity = 0;
 
     struct line *before = NULL;
+
+    // create a newFile
+    if (dataPointer == NULL){
+        struct line *rn = (struct line *) malloc(sizeof(struct line));
+        rn->buffer = (char *) malloc(sizeof(char) * 1);
+        rn->buffer[0] = '\0';
+        rn->before = NULL;
+        rn->next = NULL;
+        doc->first = rn;
+        doc->last = rn;
+        doc->first->size = 0;
+        doc->first->capacity = 0;
+        doc->totalLines = 1;
+        ws->currentDraw = doc->first;
+        ws->y = 0;
+        ws->x = 0;
+        return;
+    }
 
     // get line per line
     while (getline(&buffer, &capacity, dataPointer) != -1){

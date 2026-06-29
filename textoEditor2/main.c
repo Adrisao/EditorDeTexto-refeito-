@@ -57,14 +57,13 @@ int main(int argc, char *argv[]){
     if (argc > 1) inputData(argc, argv, &file, &flags);
 
     // -h flag (help flag)
-    if (flags & HELPFLAG){
+    if (file == NULL || (flags & HELPFLAG)){
         help();
         return 0;
     }
 
     // open file
     if (file) OpenFile(file, &doc, &ws);
-
     cursor.currentLine = doc.first;
     ws.currentDraw = doc.first;
 

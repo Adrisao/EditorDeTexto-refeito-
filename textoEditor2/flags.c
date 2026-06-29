@@ -1,4 +1,5 @@
 #include "flags.h"
+#include <stdio.h>
 
 void inputData(int argc, char *argv[], char **file, enum FlagData *flags){
     for (int i = 1; i < argc; i ++){
@@ -29,5 +30,8 @@ void inputData(int argc, char *argv[], char **file, enum FlagData *flags){
             continue;
         }
         *file = argv[i];
+    }
+    if (file == NULL){
+
     }
 }
