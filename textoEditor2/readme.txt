@@ -42,3 +42,4 @@ Durante a edição, estão disponíveis os seguintes atalhos:
 
 * O editor foi desenvolvido para sistemas Linux e depende das bibliotecas e recursos do terminal disponíveis nesse ambiente.
 * A utilização em outros sistemas operacionais, como Windows, não é suportada sem adaptações.
+* O sistema ainda não está funcional com acentos, evite usar.
